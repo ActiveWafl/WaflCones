@@ -1,0 +1,11 @@
+<phpdox xmlns="http://phpdox.de/config">
+    <project name="Wafl Cones Ice Cream Shop" source="${basedir}/App" workdir="${basedir}/Temp">
+        <collector publiconly="false">
+            <include mask="*.php" />
+            <exclude mask="*Autoload.php" />
+        </collector>
+        <generator output="${basedir}">
+            <build engine="html" enabled="true" output="Docs"/>
+        </generator>
+    </project>
+</phpdox>

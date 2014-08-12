@@ -1,0 +1,27 @@
+#AddNewEmployeeButton
+{
+    padding: 24px;
+    font-size: 150%;
+    margin: 12px;
+    float: right;
+}
+.Buttons
+{
+    margin: 8px;
+    text-align: center;
+}
+.Panel
+{
+    text-align: center;
+}
+
+.Buttons .Button
+{
+    padding: 16px;
+    font-size: 130%;
+}
+
+#EmployeePanels
+{
+    margin: 16px;
+}

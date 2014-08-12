@@ -1,0 +1,50 @@
+Skins
+	DefaultSkin
+		Path		=	DefaultSkin
+		Fonts
+			BaseFont
+				Family		=	"Open Sans"
+				Provider	=	Google\\GoogleFonts
+				Fallback	=	sans-serif
+				BaseSize	=	18px
+				Weight		=	normal
+			HeadingFont
+				Family		=	"Ubuntu"
+				Provider	=	Google\\GoogleFonts
+				Fallback	=	serif
+				BaseSize	=	20px
+				Weight		=	bold
+			SubFont
+				Family		=	"Pt Sans"
+				Provider	=	Google\\GoogleFonts
+				Fallback	=	serif
+				BaseSize	=	14px
+				Weight		=	normal
+		Layout
+			VerticalElementSeparation	=	30px
+			RowSeparation				=	15px
+			ColumnSeparation			=	15px
+		Colors
+			Base			=	#333333
+			Heading			=	#333333
+			Sub				=	#333333
+			Title			=	#000000
+			Action			=	#3366aa
+			ActiveAction	=	#225599
+			Annotation		=	#666666
+			Inset			=	#d9edf7
+			Context
+				Info			=	#49afcd
+				InfoContrast	=	#ffffff
+				Primary			=	#0074cc
+				PrimaryContrast	=	#ffffff
+				Success			=	#51a351
+				SuccessContrast	=	#ffffff
+				Warning			=	#faa732	
+				WarningContrast	=	#ffffff
+				Urgent			=	#bd362f
+				UrgentContrast	=	#ffffff
+				Error			=	#bd362f
+				ErrorContrast	=	#ffffff
+				Inverse			=	#414141
+				InverseContrast	=	#ffffff

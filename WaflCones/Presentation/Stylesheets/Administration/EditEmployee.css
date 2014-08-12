@@ -1,0 +1,16 @@
+.Buttons
+{
+    text-align: center;
+}
+
+.Buttons .Button,
+.Buttons button
+{
+    font-size: 150%;
+    padding: 16px;
+    margin: 8px;
+}
+form
+{
+    text-align: center;
+}

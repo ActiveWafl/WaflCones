@@ -1,0 +1,38 @@
+#ProcessSaleButton,
+#AddItemButton
+{
+    font-size: 130%;
+    line-height: normal;
+}
+#AddItemButton
+{
+    padding: 12px;
+}
+#AmountTendered
+{
+    font-size: 130%;
+}
+.Price
+{
+    text-align: right;
+}
+#FlavorButtons
+{
+    text-align: center;
+}
+#FlavorButtons label
+{
+    display: inline;
+    font-size: 130%;
+}
+#PostSalePopup
+{
+    text-align: center;
+    font-size: 130%;
+}
+#PostSalePopup a.Button
+{
+    padding: 12px;
+    margin: 12px;
+    font-size: 130%;
+}

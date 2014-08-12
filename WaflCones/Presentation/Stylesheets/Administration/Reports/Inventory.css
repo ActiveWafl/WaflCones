@@ -1,0 +1,48 @@
+.BarChart
+{
+    border: solid 1px #999999;
+    padding: 12px;
+    float: left;
+}
+div#FlavorPanels table
+{
+    float: left;
+    width: auto;
+}
+.BarChart .Series
+{
+    display: inline-block;
+    height: 300px;
+    position: relative;
+    width: 70px;
+}
+
+.BarChart .Series .Bar
+{
+    border: solid 1px #333333;
+    bottom: 0px;
+    font-size: 70%;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+.BarChart .Series h2
+{
+    bottom: 0px;
+    font-size: 50%;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+#ReportsMenuButton
+{
+    float: right;
+    font-size: 120%;
+    padding: 12px;
+    margin-right: 16px;
+}
+figure caption
+{
+    display: block;
+    clear: both;
+}

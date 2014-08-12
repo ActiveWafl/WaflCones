@@ -1,0 +1,35 @@
+Smarty3
+    CompileFolder   =   {$app->Get_Settings()->Get_Paths()->Get_Application()->Get_Temp().\"TemplateCompiles\"}
+    CacheFolder     =   {$app->Get_Settings()->Get_Paths()->Get_Application()->Get_Temp().\"TemplateCache\"}
+    TemplateFolders =   //added in view engine currently
+    PluginFolders   =   //added in view engine currently
+    EnableCaching   =   //this should be set in code for view engine
+    ErrorReporting  =   {E_ALL}
+    ForceCompile    =   {false}
+
+//UserAuthentication
+//    FormField1                          =   FullName
+//    FormField2                          =   EmployeeId
+//    ActionRequestVariable               =   UserAuthAction
+//    ActionRequestVariableNewUserValue   =   NewAccount
+//    ActionRequestVariableLogoutValue    =   Logout
+//    RequiresCaptcha                     =   false
+//    ServerUri                           =   192.168.1.126
+//    AdminUserDistinguishedName          =   cn=admin,dc=plazko,dc=com
+//    AdminUserPassword                   =   Nahoon101!
+//    ParentDistinguishedName             =   ou=webusers,dc=plazko,dc=com
+//    UserClass                           =   \\WaflCones\\FunctionalModel\\Employee
+UserAuthentication
+    FormField1                          =   FullName
+    FormField2                          =   EmployeeId
+    ActionRequestVariable               =   UserAuthAction
+    ActionRequestVariableNewUserValue   =   NewAccount
+    ActionRequestVariableLogoutValue    =   Logout
+    RequiresCaptcha                     =   false
+    UserTable                           =   Employees
+    UsernameColumn                      =   FullName
+    PasswordColumn                      =   EmployeeId
+    UserTableKeyField                   =   EmployeeId
+    LogoutRedirect                      =   /
+    DataConnection                      =   Master
+    UserClass                           =   \\WaflCones\\FunctionalModel\\Employee

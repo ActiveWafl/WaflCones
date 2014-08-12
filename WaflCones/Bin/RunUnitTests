@@ -1,0 +1,14 @@
+#!/bin/bash
+/usr/bin/php ../../../Wafl/Cli/RunUnitTests.php
+
+echo Running unit tests...
+if $WAFL_PATH != "" 
+then
+    RUNPATH=$WAFL_PATH
+    echo ActiveWAFL environment is set to $WAFL_PATH
+else
+    RUNPATH=$(php GetWaflFolder.php);
+    echo ActiveWAFL environment not set. Attempting in $RUNPATH
+fi
+
+php ${RUNPATH}Util/RunUnitTests.php

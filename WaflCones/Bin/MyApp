@@ -1,0 +1,5 @@
+#!/bin/bash
+echo Running app...
+
+/usr/bin/php ../Cli/WaflCones.php
+

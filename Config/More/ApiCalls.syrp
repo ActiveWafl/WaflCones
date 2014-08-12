@@ -1,0 +1,5 @@
+ProcessSale
+    ApiCall         =   ProcessSale
+    HandlerFunction =   ProcessSale
+    HandlerFile     =   General.php
+    HandlerClass    =   \\WaflCones\\Api\\General

@@ -1,0 +1,11 @@
+Application
+	Name					=	"Wafl Cones Ice Cream Shop"
+	Guid					=	"WaflCones"                                   
+	RootNameSpace			=	"WaflCones"	
+	SiteArea				=	"MainSection"
+	Timezone				=	"America/Phoenix"
+	DefaultUserClass		=	\\Wafl\\Users\\User
+	DefaultUserGroupClass	=	\\Wafl\\Users\\UserGroup
+Paths
+	Application
+		ConfigFolder		=	"Config/"

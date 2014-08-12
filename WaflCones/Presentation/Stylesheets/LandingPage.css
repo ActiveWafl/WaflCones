@@ -1,0 +1,22 @@
+#MainMenu
+{
+    text-align: center;
+}
+#MainMenu a.Button
+{
+    display: inline-block;
+    padding: 5%;
+    font-size: 200%;
+    line-height: normal;
+    margin: 20px;
+}
+#MainMenu a.Button#AdministrationButton, 
+#MainMenu a.Button#SignoutButton
+{
+    font-size: 150%;
+    padding: 3%;
+}
+#LoginForm
+{
+    max-width: 500px;
+}

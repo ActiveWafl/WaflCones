@@ -1,0 +1,12 @@
+Paths
+	Application
+		Presentation			=	"Presentation/"
+		Html					=	"Templates/"		//relative to the Presentation folder defined above
+		Stylesheets				=	"Stylesheets/"		//relative to the Presentation folder defined above
+		FuncModelsClientFolder	=	"FunctionalModel/"
+		FuncModelsServerFolder	=	"FunctionalModel/"
+		ApiHandlerFolder		=	"Api/"
+	Wafl
+		Controls	=	"Controls/"
+		Extensions	=	"Extensions/"
+		Util		=	"Util/"

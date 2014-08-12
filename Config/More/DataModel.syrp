@@ -1,0 +1,51 @@
+Default
+
+	Widgets
+	ReadWrite|100,100,200,200
+	"notes go here btw note to self this is x1,y1,x2,y2 coords of diagram"
+		WidgetId	Int	10	Unsigned	PrimaryKey	-
+		SomeColumn2	Varchar	45	-	-	-
+		WidgetMakerId	Int	10	Unsigned	Index	Default.WidgetMakers.WidgetMakerId
+		SomeColumn4	Char	45	-	Unique	-
+
+	WidgetMakers
+	ReadWrite|100,100,200,200
+	"notes go here btw note to self this is x1,y1,x2,y2 coords of diagram"
+		WidgetMakerId	Int		10	Unsigned	PrimaryKey	-
+		SomeColumn2		Varchar	45	-				Index		-
+		SomeColumn3		Int		10	Unsigned	-				-
+		SomeColumn4		Char	45	-				Unique		-
+
+	Licenses
+	ReadWrite|100,100,200,200
+	"notes go here btw note to self this is x1,y1,x2,y2 coords of diagram"
+		LicenseId		Int		10	Unsigned	PrimaryKey	-
+		SomeColumn2		Varchar	45	-				-				-
+
+	WidgetMakerLicenses
+	ReadWrite|100,100,200,200
+	"notes go here btw note to self this is x1,y1,x2,y2 coords of diagram"
+		WidgetMakerLicenseId	Int		10	Unsigned	PrimaryKey
+		WidgetMakerId				int		10	unsigned	-				Default.WidgetMakers.WidgetMakerId
+		LicenseId					int		10	unsigned	-				Default.Licenses.LicenseId
+
+
+DblEjDocs
+
+	SomeTable
+	ReadWrite|100,100,200,200
+	"notes go here btw note to self this is x1,y1,x2,y2 coords of diagram"
+		SomeTableId	Int		10	Unsigned	PrimaryKey	-
+		SomeColumn2	Varchar 45	-				-				-
+
+	SomeTable2
+	ReadWrite|100,100,200,200
+	"notes go here btw note to self this is x1,y1,x2,y2 coords of diagram"
+		SomeTable2Id	Int		10	Unsigned	PrimaryKey	-
+		SomeColumn2		Varchar	45	-				-				-
+
+	SomeView
+	ReadOnly|100,100,200,200
+	"notes go here btw note to self this is x1,y1,x2,y2 coords of diagram"
+		SomeTable2Id	Int		10	Unsigned	PrimaryKey	-
+		SomeColumn2		Varchar 45	-				-				-

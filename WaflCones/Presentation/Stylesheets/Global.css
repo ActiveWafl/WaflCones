@@ -1,0 +1,54 @@
+/* Site-wide CSS goes here */
+
+body
+{
+    background-color: #dadada;
+}
+body>header
+{
+    margin-top: 0px;
+    background-color: rgba(33,33,33,.9);
+    color: #ffffff;
+}
+body>footer
+{
+    background-color: #666666;
+    color: #ffffff;
+}
+body>header h1, body>header h5
+{
+    color: #ffffff;
+    margin: 0;
+}
+header img
+{
+    display: block;
+    margin-top: 10px;
+    border: solid 1px;
+}
+.Dock.Left.Panel.FullHeight
+{
+    padding: 0px;
+}
+.NavJump
+{
+    border-top: 160px solid transparent;
+    margin: -160px 0 0;
+    display: block;
+    color: transparent;
+    outline-color: transparent;
+}
+
+h1
+{
+    font-size: 180% !important;
+    margin: 0 8px;
+}
+h2
+{
+    font-size: 140% !important;
+}
+h3
+{
+    font-size: 110% !important;
+}

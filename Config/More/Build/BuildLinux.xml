@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project 
+    name="{APPLICATION_NAME" 
+    default="Build"
+    xmlns:if="ant:if"
+    xmlns:unless="ant:unless"
+>
+
+    <property name="baseFolder" value="/var/www"/>
+    <property name="phpFolder" value="/bin/php"/>
+    <property name="dblejFolder" value="${baseFolder}/vhosts/shared/DblEj"/>
+    <property name="waflFolder" value="${baseFolder}/vhosts/shared/Wafl"/>
+    <property name="webappFolder" value="${baseFolder}/vhosts/waflcones.tld"/>
+    <property name="outputFolder" value="${webappFolder}/Output"/>
+		
+    <!-- if using jenkins -->
+    <!-- property environment="env"/ -->
+    <!-- property name="workspace" value="${env.WORKSPACE}" / -->
+    <!-- property name="jobname" value="${env.JOB_NAME}" / -->
+    <!-- property name="buildid" value="${env.BUILD_ID}" / -->
+
+    <!-- if not using jenkins -->
+    <property name="workspace" value="${outputFolder}/Build"/>
+    <property name="jobname" value="Demo Mvc Web App Windows Build" />
+    <property name="buildid" value="Build1" />
+
+    <property name="installFolder" value="${workspace}/AppRoot"/>
+
+
+    <target name="AggregateBuildReports" description="Aggregate tool output with PHP_CodeBrowser">
+        <exec executable="phpcb.bat" dir="${phpFolder}"> <!-- you'll need to create a .bat file that calls php phpcb.phar -->
+            <arg value="--log" />
+            <arg path="${outputFolder}/Build/Docs/Current/BuildLogs" />
+            <arg value="--source" />
+            <arg path="${installFolder}/WaflCones" />
+            <arg value="--output" />
+            <arg path="${outputFolder}/Build/Docs/Current/CodeBrowser" />
+        </exec>
+    </target>
+	
+    <target name="Build"
+            depends="PrepareBuild,CheckPhpSyntax,MeasureProjectSize,CalculatePhpCodeQuality,DetectPhpMesses,ValidatePhpCodingStandard,DetectDuplicatePhpCode,RunDatabaseUpdates,RunUnitTests,AggregateBuildReports"/>
+
+    <target name="CalculatePhpCodeQuality" description="Calculate software metrics using PHP_Depend">
+        <exec executable="pdepend.bat" dir="${phpFolder}">
+            <arg value="--jdepend-xml=${outputFolder}/Build/Docs/Current/BuildLogs/AppMetrics.xml" />
+            <arg value="--jdepend-chart=${outputFolder}/Build/Docs/Current/BuildLogs/AppMetricsChart.svg" />
+            <arg value="--overview-pyramid=${outputFolder}/Build/Docs/Current/BuildLogs/OverviewPyramidChart.svg" />
+            <arg path="${installFolder}/WaflCones" />
+        </exec>
+    </target>
+
+    <target name="CheckPhpSyntax" depends="PrepareBuild" description="Perform syntax check of sourcecode files">
+        <echo>Checking syntax for ${basedir} /App, /Public and, /Tests with php -l...</echo>
+        <apply executable="php" failonerror="true">
+            <arg value="-l" />
+            <fileset dir="${installFolder}/WaflCones">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+            <fileset dir="${installFolder}/Public">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+            <fileset dir="${installFolder}/WaflCones/Tests">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+        </apply>
+    </target>
+
+    <target name="Clean" description="Cleanup build artifacts">
+        <echo message="Deleting workspace folders from previous build..."/>
+        <delete dir="${outputFolder}/Build"/>
+        <delete dir="${workspace}/shared"/>
+    </target>
+
+    <target name="DetectDuplicatePhpCode" description="Find duplicate code using phpcpd">
+        <exec executable="phpcpd.bat" dir="${phpFolder}">
+            <arg value="--log-pmd" />
+            <arg value="${outputFolder}/Build/Docs/Current/BuildLogs/DuplicateCodeReport.xml" />
+            <arg path="${installFolder}/WaflCones" />
+        </exec>
+    </target>
+
+    <target name="DetectPhpMesses" description="Perform project mess detection using phpmd creating a log file for the continuous integration server">
+        <exec executable="phpmd.bat" dir="${phpFolder}">
+            <arg path="${installFolder}/WaflCones" />
+            <arg value="xml" />
+            <arg path="${waflFolder}/CodingStandards/Wafl1Md/ruleset.xml" />
+            <arg value="--reportfile" />
+            <arg path="${outputFolder}/Build/Docs/Current/BuildLogs/MessDetectionLog.xml" />
+        </exec>
+    </target>
+	
+    <target name="GeneratePhpDocumentation" description="Generate API documentation using phpDox">
+        <exec executable="phpdoc.bat" dir="${phpFolder}">
+            <arg value="-f" />
+            <arg value="${basedir}/phpdox.xml" />
+        </exec>
+    </target>
+
+    <target name="GetRevisionFromMercurialRepo">
+        <echo message="Getting the repo revision number for the App..."/>
+        <exec dir="${workspace}/AppRoot" executable="hg" outputproperty="AppHgSummary">
+            <arg line="summary"/>
+        </exec>
+        <echo>Got app hg summary ${AppHgSummary}</echo>
+        <propertyregex property="AppRevision"
+                       input="${AppHgSummary}"
+                       regexp="parent: ([0-9]*):([a-z0-9]*) tip"
+                       select="\1"
+                       defaultValue="AppRevision"
+                       casesensitive="false" />
+        <echo>Got app revision ${AppRevision}</echo>
+    </target>
+
+    <target name="MeasureProjectSize" description="Measure project size using phploc">
+        <echo>Running phploc to get project size...</echo>
+        <exec executable="phploc.bat" dir="${phpFolder}"> <!-- you'll need to create a .bat file that calls php phpcb.phar -->
+            <arg value="--log-csv" />
+            <arg path="${outputFolder}/Build/Docs/Current/BuildLogs/ProjectSizeReport.csv" />
+            <arg path="${installFolder}/WaflCones" />
+        </exec> 
+    </target> 
+	
+    <target name="PrepareBuild" depends="Clean" description="Prepare for the build">
+        <echo message="Creating workspace folders needed for build..."/>
+        <mkdir dir="${outputFolder}/Build/Docs/Current/"/>
+        <mkdir dir="${outputFolder}/Build/Docs/Current/BuildLogs"/>
+        <mkdir dir="${outputFolder}/Build/Docs/Current/CoverageReportHtml"/>
+        <mkdir dir="${installFolder}"/>
+        <mkdir dir="${installFolder}/WaflCones"/>
+        <mkdir dir="${workspace}/shared"/>
+        <mkdir dir="${waflFolder}"/>
+        <mkdir dir="${dblejFolder}"/>
+        <mkdir dir="${outputFolder}/Temp"/>
+        <mkdir dir="${outputFolder}/Temp/Build"/>
+
+        <echo message="Workspace: ${workspace}"/>
+
+        <!-- if using jenkins -->
+        <!--echo message="Job directory: ${workspace}../../jobs/${jobname}"/>
+        <echo message="Build data: ${workspace}../../jobs/${jobname}/build/${buildid}"/-->
+
+
+        <!-- if not using jenkins -->
+        <copy todir="${installFolder}" >
+            <fileset dir="${webappFolder}" includes="**.phar"/>
+            <fileset dir="${webappFolder}" includes="**.syrp"/>
+            <fileset dir="${webappFolder}" includes="**.md"/>
+        </copy>
+        <copy todir="${installFolder}/Public" >
+            <fileset dir="${webappFolder}/Public" includes="**"/>
+        </copy>
+        <copy todir="${installFolder}/WaflCones" >
+            <fileset dir="${webappFolder}/WaflCones" includes="**"/>
+        </copy>
+        <copy todir="${installFolder}/Config" >
+            <fileset dir="${webappFolder}/Config" includes="**.syrp"/>
+            <fileset dir="${webappFolder}/Config" includes="**.md"/>
+        </copy>
+        <copy todir="${installFolder}/Config/More" >
+            <fileset dir="${webappFolder}/Config/More" includes="**.syrp"/>
+            <fileset dir="${webappFolder}/Config/More" includes="**.md"/>
+        </copy>
+        <copy todir="${installFolder}/Config/More/Locale" >
+            <fileset dir="${webappFolder}/Config/More/Locale" includes="**"/>
+        </copy>
+    </target>
+
+    <target name="RunDatabaseUpdates" description="Run database updates">
+        <exec dir="${waflFolder}/Bin" executable="php" failonerror="true">
+            <env key="WAFL_ENVIRONMENT" value="build" />
+            <arg line='DeployDatabaseChanges AppRoot="${installFolder}/" WaflEnvironment="build"' />
+        </exec>
+    </target>
+	
+    <target name="RunIntegrationTests" description="Run integration tests with PHPUnit">
+        <echo message="Starting Xvfb..." />
+        <exec dir="${waflFolder}/Extensions/Selenium" executable="Xvfb" spawn="true">
+            <env key="DISPLAY" value=":10" />
+            <arg line=':10 -ac' />
+        </exec>
+        <echo message="Waiting for Xvfb to finish starting..." />
+        <sleep seconds="5"/>
+        <echo message="Starting Selenium Server..." />
+        <exec dir="${waflFolder}/Extensions/Selenium" executable="java" spawn="true">
+            <env key="DISPLAY" value=":10" />
+            <arg line='-jar selenium-server-standalone-2.40.0.jar' />
+        </exec>
+        <echo message="Waiting for Selenium Server to finish starting..." />
+        <sleep seconds="5"/>
+        <echo message="Starting phpunit..." />
+        <exec dir="${phpFolder}" executable="phpunit.bat" failonerror="true">
+            <env key="WAFL_ENVIRONMENT" value="build" />
+            <env key="DISPLAY" value=":10" />
+            <arg line='--bootstrap="${installFolder}/Bootstrap.php"' />
+            <arg path="./*" />
+        </exec>
+        <echo message="done" />
+    </target>
+	
+    <target name="RunUnitTests" description="Run unit tests with PHPUnit">
+        <apply executable="phpunit.bat" dir="${phpFolder}" parallel="true">
+            <env key="WAFL_ENVIRONMENT" value="build" />
+            <arg line="--configuration" />
+            <arg path="${webappFolder}/Config/More/Build/PhpUnit.xml" />
+            <fileset dir="${installFolder}/WaflCones/Tests/Unit" includes="*.php"/>
+        </apply>
+        <echo message="done" />
+    </target>
+	
+    <target name="ValidatePhpCodingStandard" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+        <exec executable="cmd" dir="${phpFolder}">
+            <arg value="/c"/>
+            <arg value="phpcs.bat" />
+            <arg value="-v" />
+            <arg value="--report=checkstyle" />
+            <arg value='--report-file="${outputFolder}/Build/Docs/Current/BuildLogs/CodeStandardViolations.xml"' />
+            <arg value='--standard="${waflFolder}/CodingStandards/Wafl1/ruleset.xml"' />
+            <arg path="${installFolder}/WaflCones" />
+            <arg value="--output" />
+            <arg path="${outputFolder}/Build/Docs/Current/CodeBrowser" />
+        </exec>
+    </target>	
+    <target name="DeployToStagingServer" description="Deploy the website to staging">
+        <delete dir="${baseFolder}/vhosts/s.waflcones.tld/Config" failonerror="false" verbose="true" />
+        <delete dir="${baseFolder}/vhosts/s.waflcones.tld/WaflCones" failonerror="false" verbose="true" />
+        <delete dir="${baseFolder}/vhosts/s.waflcones.tld/Public" failonerror="false" verbose="true" />
+        <mkdir dir="${baseFolder}/vhosts/s.waflcones.tld/Config"/>
+        <mkdir dir="${baseFolder}/vhosts/s.waflcones.tld/WaflCones"/>
+        <mkdir dir="${baseFolder}/vhosts/s.waflcones.tld/Public"/>
+				
+        <echo message="Copying in new files..." />		
+        <copy todir="${baseFolder}/vhosts/shared/Wafl" >  
+            <fileset dir="${waflFolder}" includes="**"/>  
+        </copy>
+        <copy todir="${baseFolder}/vhosts/shared/DblEj" >  
+            <fileset dir="${dblejFolder}" includes="**"/>  
+        </copy>
+		  
+        <copy todir="${baseFolder}/vhosts/s.waflcones.tld/Config" >  
+            <fileset dir="${installFolder}/Config" includes="**"/>  
+        </copy>
+        <copy todir="${baseFolder}/vhosts/s.waflcones.tld/Public" >  
+            <fileset dir="${installFolder}/Public" includes="**"/>  
+        </copy>
+        <copy todir="${baseFolder}/vhosts/s.waflcones.tld/WaflCones" >  
+            <fileset dir="${installFolder}/WaflCones" includes="**"/>  
+        </copy>
+        <copy file="${installFolder}/AppSupport.phar" tofile="${baseFolder}/vhosts/s.waflcones.tld/AppSupport.phar" />
+        <copy file="${installFolder}/Application.syrp" tofile="${baseFolder}/vhosts/s.waflcones.tld/Application.syrp" />
+        <copy file="${installFolder}/Readme.md" tofile="${baseFolder}/vhosts/s.waflcones.tld/Readme.md" />
+				
+        <echo message="Setting htaccess environment to 'stage'..." />		
+        <replace file="${baseFolder}/vhosts/s.waflcones.tld/Public/.htaccess" token="SetEnv WAFL_ENVIRONMENT dev" value="SetEnv WAFL_ENVIRONMENT stage"/>		
+    </target>
+    <target name="DeployToTestServer" description="Deploy the website to test">
+        <echo message="Clearing out old files..." />
+        <delete dir="${baseFolder}/vhosts/t.waflcones.tld/Config" failonerror="false" verbose="true" />
+        <delete dir="${baseFolder}/vhosts/t.waflcones.tld/WaflCones" failonerror="false" verbose="true" />
+        <delete dir="${baseFolder}/vhosts/t.waflcones.tld/Public" failonerror="false" verbose="true" />
+        <mkdir dir="${baseFolder}/vhosts/t.waflcones.tld/Config"/>
+        <mkdir dir="${baseFolder}/vhosts/t.waflcones.tld/WaflCones"/>
+        <mkdir dir="${baseFolder}/vhosts/t.waflcones.tld/Public"/>
+		
+        <echo message="Copying in new files..." />		
+        <copy todir="${baseFolder}/vhosts/t.waflcones.tld/Config" >  
+            <fileset dir="${installFolder}/Config" includes="**"/>  
+        </copy>
+        <copy todir="${baseFolder}/vhosts/t.waflcones.tld/Public" >  
+            <fileset dir="${installFolder}/Public" includes="**"/>  
+        </copy>
+        <copy todir="${baseFolder}/vhosts/t.waflcones.tld/WaflCones" >  
+            <fileset dir="${installFolder}/WaflCones" includes="**"/>  
+        </copy>
+        <copy todir="${baseFolder}/vhosts/t.waflcones.tld" >  
+            <fileset dir="${installFolder}" includes="**.php"/>  
+        </copy>
+        <copy file="${installFolder}/AppSupport.phar" tofile="${baseFolder}/vhosts/t.waflcones.tld/AppSupport.phar" />
+        <copy file="${installFolder}/Application.syrp" tofile="${baseFolder}/vhosts/t.waflcones.tld/Application.syrp" />
+        <copy file="${installFolder}/Readme.md" tofile="${baseFolder}/vhosts/t.waflcones.tld/Readme.md" />
+		
+        <echo message="Setting htaccess environment to 'test'..." />		
+        <replace file="${baseFolder}/vhosts/t.waflcones.tld/Public/.htaccess" token="SetEnv WAFL_ENVIRONMENT dev" value="SetEnv WAFL_ENVIRONMENT test"/>		
+    </target>
+    <target name="DeployToProductionServer" description="Deploy the website to live production">
+        <echo message="Saving the version information to a sql database..." />		
+        <sql
+            classpath="C:/Program Files (x86)/MySQL/MySQL Connector J/mysql-connector-java-5.1.31.jar"
+            driver="com.mysql.jdbc.Driver"
+            url="jdbc:mysql://myapp-dbserver-address:3306/mysql"
+            userid="WaflCones-dbuser"
+            password="WaflCones-dbpassword"
+            autocommit="true">
+            use myapp-db
+            update SomeTable set SomeField = '${MyAppRevision}';
+        </sql>
+		  
+        <echo message="Copying in new files..." />		
+        <copy todir="${webappFolder}/Config" >  
+            <fileset dir="${installFolder}/Config" includes="**"/>  
+        </copy>
+        <copy todir="${webappFolder}/Public" >  
+            <fileset dir="${installFolder}/Public" includes="**"/>  
+        </copy>
+        <copy todir="${webappFolder}/WaflCones" >  
+            <fileset dir="${installFolder}/WaflCones" includes="**"/>  
+        </copy>
+        <copy file="${installFolder}/AppSupport.phar" tofile="${webappFolder}/AppSupport.phar" />
+        <copy file="${installFolder}/Application.syrp" tofile="${webappFolder}/Application.syrp" />
+        <copy file="${installFolder}/Readme.md" tofile="${webappFolder}/Readme.md" />
+		
+		
+        <echo message="Setting htaccess environment to 'prod'..." />		
+        <replace file="${webappFolder}/Public/.htaccess" token="SetEnv WAFL_ENVIRONMENT dev" value="SetEnv WAFL_ENVIRONMENT prod"/>
+    </target>
+	
+</project>
