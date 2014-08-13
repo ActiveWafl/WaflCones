@@ -1,108 +1,108 @@
 MainSection
 
-	LandingPage
-		Caption			=	"Wafl Cones Ice Cream Shop - Main Menu"
-		Controller		=	LandingPage
-		Presentation	=	LandingPage
-		DisplayOrder	=	1
-		IsDefault		=	1
-		Description		=	"Main Menu"
-		PreProcessCss	=	{false}
-	
-	Sale
-		Caption			=	"Wafl Cones Ice Cream Shop - Sale"
-		Controller		=	Sale
-		Presentation	=	Sale
-		DisplayOrder	=	2
-		IsDefault		=	0
-		Description		=	"Sale Screen"
-		PreProcessCss	=	{false}
+    LandingPage
+        Caption         =   "Wafl Cones Ice Cream Shop - Main Menu"
+        Controller      =   LandingPage
+        Presentation    =   LandingPage
+        DisplayOrder    =   1
+        IsDefault       =   1
+        Description     =   "Main Menu"
+        PreProcessCss   =   {false}
+
+    Sale
+        Caption         =   "Wafl Cones Ice Cream Shop - Sale"
+        Controller      =   Sale
+        Presentation    =   Sale
+        DisplayOrder    =   2
+        IsDefault       =   0
+        Description     =   "Sale Screen"
+        PreProcessCss   =   {false}
 
     Administration
         LandingPage
-            Caption			=	"Wafl Cones Ice Cream Shop - Administration Menu"
-            Controller		=	Administration/LandingPage
-            Presentation	=	Administration/LandingPage
-            DisplayOrder	=	1
-            IsDefault		=	1
-            Description		=	"Administration Menu"
-            PreProcessCss	=	{false}
+            Caption         =   "Wafl Cones Ice Cream Shop - Administration Menu"
+            Controller      =   Administration/LandingPage
+            Presentation    =   Administration/LandingPage
+            DisplayOrder    =   1
+            IsDefault       =   1
+            Description     =   "Administration Menu"
+            PreProcessCss   =   {false}
 
         Flavors
-            Caption			=	"Wafl Cones Ice Cream Shop - Administration - Flavors"
-            Controller		=	Administration/Flavors
-            Presentation	=	Administration/Flavors
-            DisplayOrder	=	2
-            IsDefault		=	0
-            Description		=	"Flavor List"
-            PreProcessCss	=	{false}
+            Caption         =   "Wafl Cones Ice Cream Shop - Administration - Flavors"
+            Controller      =   Administration/Flavors
+            Presentation    =   Administration/Flavors
+            DisplayOrder    =   2
+            IsDefault       =   0
+            Description     =   "Flavor List"
+            PreProcessCss   =   {false}
 
         EditFlavor
-            Caption			=	"Wafl Cones Ice Cream Shop - Administration - Flavor Details"
-            Controller		=	Administration/EditFlavor
-            Presentation	=	Administration/EditFlavor
-            DisplayOrder	=	3
-            IsDefault		=	0
-            Description		=	"Flavor Details and Editing"
-            PreProcessCss	=	{false}
+            Caption         =   "Wafl Cones Ice Cream Shop - Administration - Flavor Details"
+            Controller      =   Administration/EditFlavor
+            Presentation    =   Administration/EditFlavor
+            DisplayOrder    =   3
+            IsDefault       =   0
+            Description     =   "Flavor Details and Editing"
+            PreProcessCss   =   {false}
 
         Employees
-            Caption			=	"Wafl Cones Ice Cream Shop - Administration - Employees"
-            Controller		=	Administration/Employees
-            Presentation	=	Administration/Employees
-            DisplayOrder	=	4
-            IsDefault		=	0
-            Description		=	"Employee List"
-            PreProcessCss	=	{false}
+            Caption         =   "Wafl Cones Ice Cream Shop - Administration - Employees"
+            Controller      =   Administration/Employees
+            Presentation    =   Administration/Employees
+            DisplayOrder    =   4
+            IsDefault       =   0
+            Description     =   "Employee List"
+            PreProcessCss   =   {false}
 
         EditEmployee
-            Caption			=	"Wafl Cones Ice Cream Shop - Administration - Employee Details"
-            Controller		=	Administration/EditEmployee
-            Presentation	=	Administration/EditEmployee
-            DisplayOrder	=	5
-            IsDefault		=	0
-            Description		=	"Employee Details and Editing"
-            PreProcessCss	=	{false}
+            Caption         =   "Wafl Cones Ice Cream Shop - Administration - Employee Details"
+            Controller      =   Administration/EditEmployee
+            Presentation    =   Administration/EditEmployee
+            DisplayOrder    =   5
+            IsDefault       =   0
+            Description     =   "Employee Details and Editing"
+            PreProcessCss   =   {false}
 
         Reports
             LandingPage
-                Caption			=	"Wafl Cones Ice Cream Shop - Administration - Reports Menu"
-                Controller		=	Administration/Reports/Menu
-                Presentation	=	Administration/Reports/Menu
-                DisplayOrder	=	1
-                IsDefault		=	1
-                Description		=	"Administration - Reports Menu"
-                PreProcessCss	=	{false}
-            
+                Caption         =   "Wafl Cones Ice Cream Shop - Administration - Reports Menu"
+                Controller      =   Administration/Reports/Menu
+                Presentation    =   Administration/Reports/Menu
+                DisplayOrder    =   1
+                IsDefault       =   1
+                Description     =   "Administration - Reports Menu"
+                PreProcessCss   =   {false}
+
             Sales
-                Caption			=	"Wafl Cones Ice Cream Shop - Administration - Reports - Sales"
-                Controller		=	Administration/Reports/Sales
-                Presentation	=	Administration/Reports/Sales
-                DisplayOrder	=	2
-                IsDefault		=	0
-                Description		=	"Administration - Reports - Sales"
-                PreProcessCss	=	{false}
+                Caption         =   "Wafl Cones Ice Cream Shop - Administration - Reports - Sales"
+                Controller      =   Administration/Reports/Sales
+                Presentation    =   Administration/Reports/Sales
+                DisplayOrder    =   2
+                IsDefault       =   0
+                Description     =   "Administration - Reports - Sales"
+                PreProcessCss   =   {false}
 
             SalesByFlavor
-                Caption			=	"Wafl Cones Ice Cream Shop - Administration - Reports - Sales by Flavor"
-                Controller		=	Administration/Reports/SalesByFlavor
-                Presentation	=	Administration/Reports/SalesByFlavor
-                DisplayOrder	=	3
-                IsDefault		=	0
-                Description		=	"Administration - Reports - SalesByFlavor"
-                PreProcessCss	=	{false}
+                Caption         =   "Wafl Cones Ice Cream Shop - Administration - Reports - Sales by Flavor"
+                Controller      =   Administration/Reports/SalesByFlavor
+                Presentation    =   Administration/Reports/SalesByFlavor
+                DisplayOrder    =   3
+                IsDefault       =   0
+                Description     =   "Administration - Reports - SalesByFlavor"
+                PreProcessCss   =   {false}
 
             Inventory
-                Caption			=	"Wafl Cones Ice Cream Shop - Administration - Reports - Inventory"
-                Controller		=	Administration/Reports/SalesByFlavor
-                Presentation	=	Administration/Reports/SalesByFlavor
-                DisplayOrder	=	3
-                IsDefault		=	0
-                Description		=	"Administration - Reports - SalesByFlavor"
-                PreProcessCss	=	{false}
+                Caption         =   "Wafl Cones Ice Cream Shop - Administration - Reports - Inventory"
+                Controller      =   Administration/Reports/SalesByFlavor
+                Presentation    =   Administration/Reports/SalesByFlavor
+                DisplayOrder    =   3
+                IsDefault       =   0
+                Description     =   "Administration - Reports - SalesByFlavor"
+                PreProcessCss   =   {false}
 
 SiteError
-	Caption			=	"Site Error"
-	Controller		=	Errors/ServerError
-	Presentation	=	Errors/ServerError
-	DisplayOrder	=	{false}
+    Caption         =   "Site Error"
+    Controller      =   Errors/ServerError
+    Presentation    =   Errors/ServerError
+    DisplayOrder    =   {false}
