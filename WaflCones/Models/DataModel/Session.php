@@ -14,7 +14,7 @@ extends \Wafl\Extensions\UserAuth\FunctionalModel\PersistantSession
     /**
      * SessionId
      *
-     * Data Storage (DblEj\Data\StorageEngines\Mysql): 
+     * Data Storage (Wafl\Extensions\Storage\Mysql): 
      *        Primary Key
      *        Type: DATA_TYPE_STRING
      *        Default: null
@@ -26,7 +26,7 @@ extends \Wafl\Extensions\UserAuth\FunctionalModel\PersistantSession
     /**
      * EmployeeId
      *
-     * Data Storage (DblEj\Data\StorageEngines\Mysql): 
+     * Data Storage (Wafl\Extensions\Storage\Mysql): 
      *        Type: DATA_TYPE_INT unsigned
      *        Default: null
      *
@@ -56,14 +56,17 @@ extends \Wafl\Extensions\UserAuth\FunctionalModel\PersistantSession
      * @param string $searchFieldName The name of the INDEX FIELD (not necessarily the same as the model or table's field) to search on.
      * @param string $searchValue The indexed value to search for.
      * @param \DblEj\Data\IndexSort[] $sorts How to sort the results.
+     * @param int $maxResults The maximum number of results to return.
+     * @param int $startOffset The start offset of results to return.
+     * @param string $resultKeyField The name of the indexes key field which will be used to lookup the ctual data in the data storage.
      * @param \DblEj\Data\IIndex $searchIndex Which index to seach.  If not provided, the default search index will be used.
      * @return \WaflCones\FunctionalModel\Session[]
      * @throws \Exception
      */
-    public static function Search($searchFieldName, $searchValue, $sorts = null, \DblEj\Data\IIndex $searchIndex = null)
+    public static function Search($searchFieldName, $searchValue, $sorts = null, $maxResults = 100, $startOffset = 0, $resultKeyField = null, \DblEj\Data\IIndex $searchIndex = null)
     {
         self::Initialize();
-        return self::_search($searchFieldName, $searchValue, $sorts, $searchIndex);
+        return self::_search($searchFieldName, $searchValue, $sorts, $resultKeyField, $maxResults, $startOffset, $searchIndex);
     }
 
     /**
@@ -74,19 +77,21 @@ extends \Wafl\Extensions\UserAuth\FunctionalModel\PersistantSession
      * @param string $filter optional The filter to filter by.  If no filter is passed in, then all results are returned.
      * @param string $orderByFieldName optional The name of the field to order the Session's by
      * @param int $maxRecordCount optional The maximum number of Session's to return
-     * @param string $groupingField optional
+     * @param string $groupingField optional The name of the field to group on.
      * @param array $joinObjects optional The tables and fields to join as part of the search criteria (note: joined columns are not returned as properties of the data model).
      * @param int $startOffset optional
      * @param string $arrayKeyField optional
+     * @param boolean $useCachedIfAvailable optional
+     * If true, the filter will return the result from the last call who's result was not from the cache that was made to this method with identical filter and related settings.
      * @return \WaflCones\FunctionalModel\Session[] an array of the matching Sessions
      * @throws DataModelException
      * @throws DataException
      */
     public static function Filter($filter = null, $orderByFieldName = null, $maxRecordCount = null, $groupingField = null,
-    $joinObjects = null, $startOffset = 0, $arrayKeyField = null)
+    $joinObjects = null, $startOffset = 0, $arrayKeyField = null, $useCachedIfAvailable = true)
     {
         self::Initialize();
-        return self::_filter($filter, $orderByFieldName, $maxRecordCount, $groupingField, $joinObjects, $startOffset, $arrayKeyField);
+        return self::_filter($filter, $orderByFieldName, $maxRecordCount, $groupingField, $joinObjects, $startOffset, $arrayKeyField, $useCachedIfAvailable);
     }
 
     /**
@@ -94,17 +99,26 @@ extends \Wafl\Extensions\UserAuth\FunctionalModel\PersistantSession
      *
      * Get the Session's from the Storage Engine that matches the given filter and other criteria.
      *
-     * @param string $filter
-     * @param string $orderByFieldName
-     * @param string $groupingField
-     * @param array $joinObjects
+     * @param string $filter optional The filter to filter by.  If no filter is passed in, then all results are returned.
+     * @param string $orderByFieldName optional The name of the field to order the result objects by.
+     * @param string $groupingField optional The name of the field to group on.
+     * @param array $joinObjects optional
+     * An array of items to inner-join on the filterable object as an added filter constraint.
+     * The array should be associative where the key is the name of the item to join on
+     * and the value is the name of a field that is <b>mutual</b> between the filterable item and the join item.
+     * If there is not a mutual field between the items, then the value should be null.
+     * In that case, you will need to add an equality condition to the
+     * <i>$filter</i> for the fields you wish to join on.
+     * @param boolean $useCachedIfAvailable optional
+     * If true, the filter will return the result from the last call who's result was not from the cache that was made to this method with identical filter and related settings.
+     *
      * @return null|\WaflCones\FunctionalModel\Session the first matching Sessions
      * @throws DataModelException
      */
-    public static function FilterFirst($filter = null, $orderByFieldName = null, $groupingField = null, $joinObjects = null)
+    public static function FilterFirst($filter = null, $orderByFieldName = null, $groupingField = null, $joinObjects = null, $useCachedIfAvailable = true)
     {
         self::Initialize();
-        return self::_filterFirst($filter, $orderByFieldName, $groupingField, $joinObjects);
+        return self::_filterFirst($filter, $orderByFieldName, $groupingField, $joinObjects, $useCachedIfAvailable);
     }
 
 
@@ -127,6 +141,12 @@ extends \Wafl\Extensions\UserAuth\FunctionalModel\PersistantSession
     {
         if ($this->_sessionId !== $sessionId)
         {
+        
+            if (!$this->CanCurrentUserSetProperty("SessionId"))
+            {
+                throw new \Exception("Current user does not have permission to set model property");
+            }
+
             $this->_sessionId = $sessionId;
             $this->ModelChanged("SessionId");
         }
@@ -153,6 +173,12 @@ extends \Wafl\Extensions\UserAuth\FunctionalModel\PersistantSession
     {
         if ($this->_employeeId !== $employeeId)
         {
+        
+            if (!$this->CanCurrentUserSetProperty("EmployeeId"))
+            {
+                throw new \Exception("Current user does not have permission to set model property");
+            }
+
             $this->_employeeId = $employeeId;
             $this->ModelChanged("EmployeeId");
         }

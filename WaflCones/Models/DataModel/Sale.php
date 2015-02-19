@@ -14,7 +14,7 @@ extends \DblEj\Data\PersistableModel
     /**
      * SaleId
      *
-     * Data Storage (DblEj\Data\StorageEngines\Mysql): 
+     * Data Storage (Wafl\Extensions\Storage\Mysql): 
      *        Primary Key
      *        Type: DATA_TYPE_INT unsigned
      *        Default: null
@@ -26,7 +26,7 @@ extends \DblEj\Data\PersistableModel
     /**
      * SaleDate
      *
-     * Data Storage (DblEj\Data\StorageEngines\Mysql): 
+     * Data Storage (Wafl\Extensions\Storage\Mysql): 
      *        Type: DATA_TYPE_INT unsigned
      *        Default: null
      *
@@ -37,7 +37,7 @@ extends \DblEj\Data\PersistableModel
     /**
      * Price
      *
-     * Data Storage (DblEj\Data\StorageEngines\Mysql): 
+     * Data Storage (Wafl\Extensions\Storage\Mysql): 
      *        Type: DATA_TYPE_DECIMAL
      *        Default: null
      *
@@ -48,7 +48,7 @@ extends \DblEj\Data\PersistableModel
     /**
      * EmployeeId
      *
-     * Data Storage (DblEj\Data\StorageEngines\Mysql): 
+     * Data Storage (Wafl\Extensions\Storage\Mysql): 
      *        Type: DATA_TYPE_INT unsigned
      *        Default: null
      *
@@ -80,14 +80,17 @@ extends \DblEj\Data\PersistableModel
      * @param string $searchFieldName The name of the INDEX FIELD (not necessarily the same as the model or table's field) to search on.
      * @param string $searchValue The indexed value to search for.
      * @param \DblEj\Data\IndexSort[] $sorts How to sort the results.
+     * @param int $maxResults The maximum number of results to return.
+     * @param int $startOffset The start offset of results to return.
+     * @param string $resultKeyField The name of the indexes key field which will be used to lookup the ctual data in the data storage.
      * @param \DblEj\Data\IIndex $searchIndex Which index to seach.  If not provided, the default search index will be used.
      * @return \WaflCones\FunctionalModel\Sale[]
      * @throws \Exception
      */
-    public static function Search($searchFieldName, $searchValue, $sorts = null, \DblEj\Data\IIndex $searchIndex = null)
+    public static function Search($searchFieldName, $searchValue, $sorts = null, $maxResults = 100, $startOffset = 0, $resultKeyField = null, \DblEj\Data\IIndex $searchIndex = null)
     {
         self::Initialize();
-        return self::_search($searchFieldName, $searchValue, $sorts, $searchIndex);
+        return self::_search($searchFieldName, $searchValue, $sorts, $resultKeyField, $maxResults, $startOffset, $searchIndex);
     }
 
     /**
@@ -98,19 +101,21 @@ extends \DblEj\Data\PersistableModel
      * @param string $filter optional The filter to filter by.  If no filter is passed in, then all results are returned.
      * @param string $orderByFieldName optional The name of the field to order the Sale's by
      * @param int $maxRecordCount optional The maximum number of Sale's to return
-     * @param string $groupingField optional
+     * @param string $groupingField optional The name of the field to group on.
      * @param array $joinObjects optional The tables and fields to join as part of the search criteria (note: joined columns are not returned as properties of the data model).
      * @param int $startOffset optional
      * @param string $arrayKeyField optional
+     * @param boolean $useCachedIfAvailable optional
+     * If true, the filter will return the result from the last call who's result was not from the cache that was made to this method with identical filter and related settings.
      * @return \WaflCones\FunctionalModel\Sale[] an array of the matching Sales
      * @throws DataModelException
      * @throws DataException
      */
     public static function Filter($filter = null, $orderByFieldName = null, $maxRecordCount = null, $groupingField = null,
-    $joinObjects = null, $startOffset = 0, $arrayKeyField = null)
+    $joinObjects = null, $startOffset = 0, $arrayKeyField = null, $useCachedIfAvailable = true)
     {
         self::Initialize();
-        return self::_filter($filter, $orderByFieldName, $maxRecordCount, $groupingField, $joinObjects, $startOffset, $arrayKeyField);
+        return self::_filter($filter, $orderByFieldName, $maxRecordCount, $groupingField, $joinObjects, $startOffset, $arrayKeyField, $useCachedIfAvailable);
     }
 
     /**
@@ -118,17 +123,26 @@ extends \DblEj\Data\PersistableModel
      *
      * Get the Sale's from the Storage Engine that matches the given filter and other criteria.
      *
-     * @param string $filter
-     * @param string $orderByFieldName
-     * @param string $groupingField
-     * @param array $joinObjects
+     * @param string $filter optional The filter to filter by.  If no filter is passed in, then all results are returned.
+     * @param string $orderByFieldName optional The name of the field to order the result objects by.
+     * @param string $groupingField optional The name of the field to group on.
+     * @param array $joinObjects optional
+     * An array of items to inner-join on the filterable object as an added filter constraint.
+     * The array should be associative where the key is the name of the item to join on
+     * and the value is the name of a field that is <b>mutual</b> between the filterable item and the join item.
+     * If there is not a mutual field between the items, then the value should be null.
+     * In that case, you will need to add an equality condition to the
+     * <i>$filter</i> for the fields you wish to join on.
+     * @param boolean $useCachedIfAvailable optional
+     * If true, the filter will return the result from the last call who's result was not from the cache that was made to this method with identical filter and related settings.
+     *
      * @return null|\WaflCones\FunctionalModel\Sale the first matching Sales
      * @throws DataModelException
      */
-    public static function FilterFirst($filter = null, $orderByFieldName = null, $groupingField = null, $joinObjects = null)
+    public static function FilterFirst($filter = null, $orderByFieldName = null, $groupingField = null, $joinObjects = null, $useCachedIfAvailable = true)
     {
         self::Initialize();
-        return self::_filterFirst($filter, $orderByFieldName, $groupingField, $joinObjects);
+        return self::_filterFirst($filter, $orderByFieldName, $groupingField, $joinObjects, $useCachedIfAvailable);
     }
 
 
@@ -151,6 +165,12 @@ extends \DblEj\Data\PersistableModel
     {
         if ($this->_saleId !== $saleId)
         {
+        
+            if (!$this->CanCurrentUserSetProperty("SaleId"))
+            {
+                throw new \Exception("Current user does not have permission to set model property");
+            }
+
             $this->_saleId = $saleId;
             $this->ModelChanged("SaleId");
         }
@@ -177,6 +197,12 @@ extends \DblEj\Data\PersistableModel
     {
         if ($this->_saleDate !== $saleDate)
         {
+        
+            if (!$this->CanCurrentUserSetProperty("SaleDate"))
+            {
+                throw new \Exception("Current user does not have permission to set model property");
+            }
+
             $this->_saleDate = $saleDate;
             $this->ModelChanged("SaleDate");
         }
@@ -203,6 +229,12 @@ extends \DblEj\Data\PersistableModel
     {
         if ($this->_price !== $price)
         {
+        
+            if (!$this->CanCurrentUserSetProperty("Price"))
+            {
+                throw new \Exception("Current user does not have permission to set model property");
+            }
+
             $this->_price = $price;
             $this->ModelChanged("Price");
         }
@@ -229,65 +261,74 @@ extends \DblEj\Data\PersistableModel
     {
         if ($this->_employeeId !== $employeeId)
         {
+        
+            if (!$this->CanCurrentUserSetProperty("EmployeeId"))
+            {
+                throw new \Exception("Current user does not have permission to set model property");
+            }
+
             $this->_employeeId = $employeeId;
             $this->ModelChanged("EmployeeId");
         }
         return $this;
     }
 
-    public static function GetBySaleItems($flavorId = null, $sortBy = null)
-    {
-        $subclass = get_called_class();
-        return $subclass::Select
-        (
-            ($flavorId?"SaleItems.FlavorId = '$flavorId'":"1=1"),
-            $sortBy,
-            null,
-            null,
-            array
-            (
-                "SaleItems"=>"SaleId"
-            )
-        );
-    }
+                    
+    private $_employee = null;
 
     /**
     * Get the related Employee
     *
     * @return \WaflCones\FunctionalModel\Employee The Employee
     */
-    public function GetEmployee($sortBy = null)
+    public function GetEmployee($reloadFromSource = false)
     {
-        return \WaflCones\FunctionalModel\Employee::SelectFirst("EmployeeId = '".$this->Get_EmployeeId()."'", $sortBy);
+        if (!$this->_employee || $reloadFromSource || $this->IsFieldDirty("EmployeeId"))
+        {
+            $this->_employee = \WaflCones\FunctionalModel\Employee::FilterFirst("EmployeeId = '".$this->Get_EmployeeId()."'");
+        }
+        return $this->_employee;
     }
 
     /**
-     * Get Flavors related to this Sale (cross-ref: SaleItems)
+     * Get Flavors related to this Sale (cross-ref: SaleItems) (1b)
      *
+     * @param $sortBy The name of the field to sort on.
+     * @param $filter Additional query filter to apply.
      * @return \WaflCones\FunctionalModel\Flavor[]
      */
-    public function GetFlavorsCrossReferencedBySaleItems($sortBy = null)
+    public function GetFlavorsCrossReferencedBySaleItems($sortBy = null, $filter = null)
     {
-        return \WaflCones\FunctionalModel\Flavor::Select("SaleItems.SaleId = '".$this->Get_SaleId()."'", $sortBy, null, null, array("SaleItems"=>"FlavorId"));
+        $clause = "SaleItems.SaleId = '".$this->Get_SaleId()."'";
+        if ($filter)
+        {
+            $clause = "$clause and ($filter)";
+        }
+
+        return \WaflCones\FunctionalModel\Flavor::Filter($clause, $sortBy, null, null, array("SaleItems"=>"FlavorId"));
     }
 
     /**
-     * Get the SaleItems for this Sale
+     * Get the related SaleItems for this Sale
      *
-     * @param $sortBy The name of the field to sort on
+     * @param $sortBy The name of the field to sort on.
+     * @param $filter Additional query filter to apply.
+     * @param $maxRecordCount The maximum number of records to return.
+     * @param $startOffset The record offset to start with.
+     * @param $useCachedIfAvailable Should cached in-memory results be returned instead of re-querying the data source?
      * @return \WaflCones\FunctionalModel\SaleItem[]
      */
-    public function GetSaleItems($flavorId = null, $sortBy = null)
+    public function GetSaleItems($sortBy = null, $filter = null, $maxRecordCount = null, $startOffset = 0, $useCachedIfAvailable = true)
     {
         if ($this->Get_SaleId())
         {
             $clause = "SaleId = '".$this->Get_SaleId()."'";
-            if ($flavorId)
+            if ($filter)
             {
-                $clause .= "and FlavorId = '$flavorId'";
+                $clause = "$clause and ($filter)";
             }
-
-            return \WaflCones\FunctionalModel\SaleItem::Select($clause, $sortBy);
+            
+            return \WaflCones\FunctionalModel\SaleItem::Filter($clause, $sortBy, $maxRecordCount, null, null, $startOffset, null, $useCachedIfAvailable);
         } else {
             return array();
         }
