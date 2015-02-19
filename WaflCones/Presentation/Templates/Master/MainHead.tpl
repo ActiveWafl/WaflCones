@@ -1,6 +1,12 @@
 {extends file="./Html5.tpl"}
 {block "HTML_HEAD"}
     <head>
+        {if isset($PAGE)}
+            <title>{block name="PAGE_TITLE"}{$SITE_DISPLAY_TITLE} - {$PAGE->Get_FullTitle()}{/block}</title>
+        {else}
+            <title>{$SITE_DISPLAY_TITLE}</title>
+        {/if}
+        <meta name="description" content="{block name="PAGE_DESCRIPTION"}{$PAGE->Get_FullTitle()}{/block}">
         <meta charset='UTF-8'>
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
@@ -21,23 +27,15 @@
         <link id="SitewideControls-Stylesheet" rel="stylesheet" type="text/css" href="{$WEB_ROOT_RELATIVE}SitewideControls.css" />
         <link id="WaflGlobal-Stylesheet" rel="stylesheet" type="text/css" href="{$WEB_ROOT_RELATIVE}Wafl.css" />
 
-        <script type="text/javascript" src="{$WEB_ROOT_RELATIVE}Wafl/DblEj/{$CURRENT_SITEPAGE->GetClientLogicFile()}"></script>
+        <script type="text/javascript" src="{$WEB_ROOT_RELATIVE}DblEj.js"></script>
         <script type="text/javascript" src="{$WEB_ROOT_RELATIVE}Wafl.js"></script>
         <script type="text/javascript" src="{$WEB_ROOT_RELATIVE}SitewideControls.js"></script>
         <script type="text/javascript" src="{$WEB_ROOT_RELATIVE}WaflAppConfig.js"></script>
         <script type="text/javascript" src="{$WEB_ROOT_RELATIVE}{$CURRENT_SITEPAGE->GetClientLogicFile()}"></script>
 
-        <script type="text/javascript">
-            {foreach $CURRENT_SITEPAGE->Get_JavascriptIncludesLib() as $JAVASCRIPT}
-            DblEj.SiteStructure.SitePage.SetFileIncluded("{$JAVASCRIPT}");
-            {/foreach}
-        </script>
-        {if isset($PAGE)}
-            <title>{$SITE_DISPLAY_TITLE} - {$PAGE->Get_FullTitle()}</title>
-        {else}
-            <title>{$SITE_DISPLAY_TITLE}</title>
-        {/if}
+    {nocache}
     {if isset($ADDITIONAL_RAW_HEAD_HTML)}{$ADDITIONAL_RAW_HEAD_HTML}{/if}
+    {/nocache}
 
     {nominify}
     <script type="text/javascript">

@@ -21,6 +21,8 @@ if ($preAppRouter === null)
     {
         include($localAppFolder . $application->Get_Settings()->Get_Paths()->Get_Application()->Get_GlobalScript());
     }
-    WebIndex::RunApplication($application);
+    $exitCode = null;
+    WebIndex::RunApplication($application, $exitCode);
+    exit($exitCode);
 }
 ?>

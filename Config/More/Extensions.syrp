@@ -1,4 +1,4 @@
-Smarty3
+Templating\\Smarty3
     CompileFolder   =   {$app->Get_Settings()->Get_Paths()->Get_Application()->Get_Temp().\"TemplateCompiles\"}
     CacheFolder     =   {$app->Get_Settings()->Get_Paths()->Get_Application()->Get_Temp().\"TemplateCache\"}
     TemplateFolders =   //added in view engine currently
@@ -7,7 +7,7 @@ Smarty3
     ErrorReporting  =   {E_ALL}
     ForceCompile    =   {false}
 
-//UserAuthentication
+//Users\\UserAuthentication
 //    FormField1                          =   FullName
 //    FormField2                          =   EmployeeId
 //    ActionRequestVariable               =   UserAuthAction
@@ -19,7 +19,7 @@ Smarty3
 //    AdminUserPassword                   =   Nahoon101!
 //    ParentDistinguishedName             =   ou=webusers,dc=plazko,dc=com
 //    UserClass                           =   \\WaflCones\\FunctionalModel\\Employee
-UserAuthentication
+Users\\UserAuthentication
     FormField1                          =   FullName
     FormField2                          =   EmployeeId
     ActionRequestVariable               =   UserAuthAction

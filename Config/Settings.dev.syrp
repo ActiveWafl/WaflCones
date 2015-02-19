@@ -33,10 +33,10 @@ DataStorage
 		LoadBalanced	=	0	//0=none,	1=roundrobin
 
 	Master
-		Uri					=	192.168.1.126
+		Uri					=	EvanUbuntuThinkPad2
 		Catalog				=	waflcones
 		Username			=	root
-		Password			=	
+		Password			=	Nahoon101!
 		CreateScript		=	Database/Sql/CreateDatabase.sq
 		UpdateScript		=	Database/Sql/NextUpdate.sql
 		ReplicationRole		=	Master
@@ -44,5 +44,5 @@ DataStorage
 		ModelGroup			=	WaflCones
 		RequiredLocation	=	Sessions
 		AccessScope			=	ReadWrite
-		EngineDriverPath	=	\\DblEj\\Data\\StorageEngines\\Mysql
+		EngineDriverPath	=	\\Wafl\\Extensions\\Storage\\Mysql
 		CharacterEncoding	=	utf8
