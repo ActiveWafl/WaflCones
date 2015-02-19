@@ -7,18 +7,6 @@ Templating\\Smarty3
     ErrorReporting  =   {E_ALL}
     ForceCompile    =   {false}
 
-//Users\\UserAuthentication
-//    FormField1                          =   FullName
-//    FormField2                          =   EmployeeId
-//    ActionRequestVariable               =   UserAuthAction
-//    ActionRequestVariableNewUserValue   =   NewAccount
-//    ActionRequestVariableLogoutValue    =   Logout
-//    RequiresCaptcha                     =   false
-//    ServerUri                           =   192.168.1.126
-//    AdminUserDistinguishedName          =   cn=admin,dc=plazko,dc=com
-//    AdminUserPassword                   =   Nahoon101!
-//    ParentDistinguishedName             =   ou=webusers,dc=plazko,dc=com
-//    UserClass                           =   \\WaflCones\\FunctionalModel\\Employee
 Users\\UserAuthentication
     FormField1                          =   FullName
     FormField2                          =   EmployeeId
