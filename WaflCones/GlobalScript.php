@@ -12,6 +12,7 @@ use Wafl\Routers\Api,
     Wafl\Routers\PageIncludes,
     Wafl\Routers\SitewideControls,
     Wafl\Routers\WaflIncludes,
+    Wafl\Routers\Fonts,
     Wafl\Util\HttpRouter;
 
 HttpRouter::AddRouter(new CaptchaImage());
@@ -22,6 +23,7 @@ HttpRouter::AddRouter(new ControlResource());
 HttpRouter::AddRouter(new Extensions());
 HttpRouter::AddRouter(new Controller());
 HttpRouter::AddRouter(new Glyphs());
+HttpRouter::AddRouter(new Fonts());
 HttpRouter::AddRouter(new Icons());
 HttpRouter::AddRouter(new Api());
 HttpRouter::AddRouter(new Models());

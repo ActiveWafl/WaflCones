@@ -1,48 +1,50 @@
 Application
-	GuestGroupId			=	1
+    GuestGroupId                =   1
+    DefaultSiteAreaPermission   =   2
+    DefaultSitePagePermission   =   2
 
 Debug
-	SuppressErrors			=	0
-	DebugMode				=	1
-	AutoUpdateDb			=	0
+    SuppressErrors          =   0
+    DebugMode               =   1
+    AutoUpdateDb            =   0
 
 Paths
-	Application
-		LocalRoot				=	"c:/xampp/vhosts/shared/CrashCourse/WaflCones.dev/"
-		PublicWebFolder			=	"Public/"
-		DefaultPage				=	"LandingPage.php"
-		TempFolder				=	"c:/xampp/tmp/WaflCones.dev"
-		UploadFolder			=	"Uploads/"
-		GlobalEventHandlers		=	"GlobalEventHandlers.php"
-		GlobalScript			=	"GlobalScript.php"
-	Wafl
-		WaflFolder				=	"../../Wafl/"
-		DblEjFolder				=	"../../DblEj/"
+    Application
+        LocalRoot               =   "c:/xampp/vhosts/shared/CrashCourse/WaflCones.dev/"
+        PublicWebFolder         =   "Public/"
+        DefaultPage             =   "LandingPage.php"
+        TempFolder              =   "c:/xampp/tmp/WaflCones.dev"
+        UploadFolder            =   "Uploads/"
+        GlobalEventHandlers     =   "GlobalEventHandlers.php"
+        GlobalScript            =   "GlobalScript.php"
+    Wafl
+        WaflFolder              =   "../../Wafl/"
+        DblEjFolder             =   "../../DblEj/"
 Web
-	DomainName				=	"d.waflcones.tld"
-	WebUrl					=	"http://d.waflcones.tld/"
-	WebUrlSecure			=	"https://d.waflcones.tld/"
-	WebUrlRelative			=	"/"
-	SiteEmail				=	"noreply@d.waflcones.tld"
-	CookieLifetime			=	350000
-	SiteDisplayTitle		=	Wafl Cones Ice Cream Shop
-	GlobalStylesheetHasTokens	=	0
+    DomainName              =   "d.waflcones.tld"
+    WebUrl                  =   "http://d.waflcones.tld/"
+    WebUrlSecure            =   "https://d.waflcones.tld/"
+    WebUrlRelative          =   "/"
+    SiteEmail               =   "noreply@d.waflcones.tld"
+    CookieLifetime          =   350000
+    SiteDisplayTitle        =   "Wafl Cones Ice Cream Shop"
+    GlobalStylesheetHasTokens   =   0
 
 DataStorage
-	Common
-		LoadBalanced	=	0	//0=none,	1=roundrobin
+    Common
+        LoadBalanced    =   0   //0=none,1=roundrobin
 
-	Master
-		Uri					=	EvanUbuntuThinkPad2
-		Catalog				=	waflcones
-		Username			=	root
-		Password			=	Nahoon101!
-		CreateScript		=	Database/Sql/CreateDatabase.sq
-		UpdateScript		=	Database/Sql/NextUpdate.sql
-		ReplicationRole		=	Master
-		PersistModels		=	{true}
-		ModelGroup			=	WaflCones
-		RequiredLocation	=	Sessions
-		AccessScope			=	ReadWrite
-		EngineDriverPath	=	\\Wafl\\Extensions\\Storage\\Mysql
-		CharacterEncoding	=	utf8
+    Master
+        Uri                 =   EvanUbuntuThinkPad2
+        Catalog             =   waflcones
+        Username            =   root
+        Password            =   Nahoon101!
+        CreateScript        =   Database/Sql/CreateDatabase.sq
+        UpdateScript        =   Database/Sql/NextUpdate.sql
+        ReplicationRole     =   Master
+        PersistModels       =   {true}
+        ModelGroup          =   WaflCones
+        RequiredLocation    =   Sessions
+        AccessScope         =   ReadWrite
+        EngineDriverPath    =   \\Wafl\\Extensions\\Storage\\Mysql
+        CharacterEncoding   =   utf8

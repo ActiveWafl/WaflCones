@@ -10,7 +10,6 @@ require_once(__DIR__ . "/../AppSupport.phar");
 $application  = WebIndex::BootstrapApplication(__DIR__ . "/../Application.syrp", null, "\\Wafl\\Application\\MvcWebApplication");
 $requestUri   = $_SERVER["REQUEST_URI"]; //@todo do all http servers use this header?  Tested in apache. And what about REDIRECT_URL, I was checking that as well elsewhere
 HttpRouter::RouteThruNonAppCalls($requestUri, $preAppRouter);
-
 if ($preAppRouter === null)
 {
     $localRoot      = $application->Get_Settings()->Get_Paths()->Get_Application()->Get_LocalRoot();
